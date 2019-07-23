@@ -1,0 +1,87 @@
+version: '3.7'
+
+x-common: &common
+  init: true
+  tty: true
+
+x-rpc: &rpc
+  image: microversenetwork/blockchain-rpc
+  environment:
+    - DEBUG=microverse*,js-tendermint:rpc*,abci*
+
+x-node: &node
+  image: microversenetwork/tendermint
+
+services:
+  tracker:
+    <<: *common
+    image: microversenetwork/tracker
+    container_name: tracker
+    environment:
+      - DEBUG=microverse*
+
+  rpc_0:
+    <<: *rpc
+    <<: *common
+    command: microverse-blockchain-rpc --node node_0:26657/websocket
+    container_name: rpc_0
+
+  rpc_1:
+    <<: *rpc
+    <<: *common
+    command: microverse-blockchain-rpc --node node_1:26657/websocket
+    container_name: rpc_1
+
+  rpc_2:
+    <<: *rpc
+    <<: *common
+    command: microverse-blockchain-rpc --node node_2:26657/websocket
+    container_name: rpc_2
+
+  rpc_3:
+    <<: *rpc
+    <<: *common
+    command: microverse-blockchain-rpc --node node_3:26657/websocket
+    container_name: rpc_3
+
+  node_0:
+    <<: *node
+    <<: *common
+    command: node --proxy_app=tcp://rpc_0:26658 --log_level="*:info"
+    container_name: node_0
+    depends_on:
+      - rpc_0
+    ports:
+      - 26657:26657
+    volumes:
+      - ./data/node_0:/tendermint
+
+  node_1:
+    <<: *node
+    <<: *common
+    command: node --proxy_app=tcp://rpc_1:26658 --log_level="*:info"
+    container_name: node_1
+    depends_on:
+      - rpc_1
+    volumes:
+      - ./data/node_1:/tendermint
+
+  node_2:
+    <<: *node
+    <<: *common
+    command: node --proxy_app=tcp://rpc_2:26658 --log_level="*:info"
+    container_name: node_2
+    depends_on:
+      - rpc_2
+    volumes:
+      - ./data/node_2:/tendermint
+
+  node_3:
+    <<: *node
+    <<: *common
+    command: node --proxy_app=tcp://rpc_3:26658 --log_level="*:info"
+    container_name: node_3
+    depends_on:
+      - rpc_3
+    volumes:
+      - ./data/node_3:/tendermint

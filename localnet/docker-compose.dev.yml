@@ -1,0 +1,26 @@
+version: '3.7'
+
+x-rpcdev: &rpcdev
+  command: npm run dev
+  working_dir: /usr/local/lib/@microverse-network/blockchain-rpc
+  volumes:
+    - ..:/usr/local/lib/@microverse-network/blockchain-rpc
+
+services:
+  rpc_0:
+    <<: *rpcdev
+    command: npm run dev node_0:26657/websocket
+    ports:
+      - 9229:9229
+
+  rpc_1:
+    <<: *rpcdev
+    command: npm run dev node_1:26657/websocket
+
+  rpc_2:
+    <<: *rpcdev
+    command: npm run dev node_2:26657/websocket
+
+  rpc_3:
+    <<: *rpcdev
+    command: npm run dev node_3:26657/websocket

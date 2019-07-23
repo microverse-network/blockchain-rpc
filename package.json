@@ -1,0 +1,17 @@
+{
+  "name": "@microverse-network/blockchain-rpc",
+  "version": "0.0.0",
+  "bin": {
+    "microverse-blockchain-rpc": "bin/blockchain-rpc.js"
+  },
+  "dependencies": {
+    "@microverse-network/abci": "0.0.0",
+    "@microverse-network/core": "0.0.0",
+    "rpc-websockets": "^4.6.1",
+    "shortid": "^2.2.14"
+  },
+  "scripts": {
+    "dev": "node bin/blockchain-rpc.js",
+    "dev-with-inspect": "node --inspect=0.0.0.0:9229 bin/blockchain-rpc.js"
+  }
+}
